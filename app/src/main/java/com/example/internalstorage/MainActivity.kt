@@ -4,12 +4,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Patterns
+import android.view.View
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var classe: EditText
     lateinit var AddUser: Button
     lateinit var items: Array<String>
+    val userDbHelper = UserDbHelper(this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,51 +41,51 @@ class MainActivity : AppCompatActivity() {
         val listOfInputs = listOf(nom_prenom, date_naissance, adresse_email, classe)
         listOfInputs.forEach { listenOnInput(it) }
 
-        AddUser.setOnClickListener {
-            if (allValid()) {
-                val alertDialogBuilder = AlertDialog.Builder(this)
-                alertDialogBuilder.setTitle("Submit")
-                alertDialogBuilder.setMessage(
-                    "Do you wanna submit this data ?\n" +
-                            "Nom et Prénom : ${nom_prenom.text}\n" +
-                            "Date de naissance : ${date_naissance.text}\n" +
-                            "Adresse email : ${adresse_email.text}\n" +
-                            "Classe : ${classe.text}"
-                )
-                alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
-//                    val intent = Intent(this, share::class.java)
-//                    intent.putExtra("nom_prenom",nom_prenom.text.toString())
-//                    intent.putExtra("date_naissance",date_naissance.text.toString())
-//                    intent.putExtra("adresse_email",adresse_email.text.toString())
-//                    intent.putExtra("classe",classe.text.toString())
-//                    startActivity(intent)
-                    println("Nom et Prénom : ${nom_prenom.text}")
-                    println("Date de naissance : ${date_naissance.text}")
-                    println("Adresse email : ${adresse_email.text}")
-                    println("Classe : ${classe.text}")
-                    Toast.makeText(this, "Data submitted successfully", Toast.LENGTH_SHORT).show()
-                }
-                alertDialogBuilder.setNegativeButton("No") { dialog, which ->
-                    Toast.makeText(
-                        this,
-                        "Canceled", Toast.LENGTH_SHORT
-                    ).show()
-                }
-                alertDialogBuilder.show()
-            } else {
-                val snackBar: Snackbar =
-                    Snackbar.make(
-                        findViewById(R.id.AddUser),
-                        "Veuillez remplir tous les champs",
-                        Snackbar.LENGTH_LONG
-                    )
-                snackBar.setAction("OK") {
-                    snackBar.dismiss()
-                }
-                Handler(Looper.getMainLooper()).postDelayed({ snackBar.dismiss() }, 7500)
-                snackBar.show()
-            }
-        }
+//        AddUser.setOnClickListener {
+//            if (allValid()) {
+//                val alertDialogBuilder = AlertDialog.Builder(this)
+//                alertDialogBuilder.setTitle("Submit")
+//                alertDialogBuilder.setMessage(
+//                    "Do you wanna submit this data ?\n" +
+//                            "Nom et Prénom : ${nom_prenom.text}\n" +
+//                            "Date de naissance : ${date_naissance.text}\n" +
+//                            "Adresse email : ${adresse_email.text}\n" +
+//                            "Classe : ${classe.text}"
+//                )
+//                alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
+////                    val intent = Intent(this, share::class.java)
+////                    intent.putExtra("nom_prenom",nom_prenom.text.toString())
+////                    intent.putExtra("date_naissance",date_naissance.text.toString())
+////                    intent.putExtra("adresse_email",adresse_email.text.toString())
+////                    intent.putExtra("classe",classe.text.toString())
+////                    startActivity(intent)
+//                    println("Nom et Prénom : ${nom_prenom.text}")
+//                    println("Date de naissance : ${date_naissance.text}")
+//                    println("Adresse email : ${adresse_email.text}")
+//                    println("Classe : ${classe.text}")
+//                    Toast.makeText(this, "Data submitted successfully", Toast.LENGTH_SHORT).show()
+//                }
+//                alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+//                    Toast.makeText(
+//                        this,
+//                        "Canceled", Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//                alertDialogBuilder.show()
+//            } else {
+//                val snackBar: Snackbar =
+//                    Snackbar.make(
+//                        findViewById(R.id.AddUser),
+//                        "Veuillez remplir tous les champs",
+//                        Snackbar.LENGTH_LONG
+//                    )
+//                snackBar.setAction("OK") {
+//                    snackBar.dismiss()
+//                }
+//                Handler(Looper.getMainLooper()).postDelayed({ snackBar.dismiss() }, 7500)
+//                snackBar.show()
+//            }
+//        }
     }
 
     fun init(){
@@ -230,5 +234,26 @@ class MainActivity : AppCompatActivity() {
             valid = false
         }
         return valid
+    }
+
+    fun addUser(view:View){
+
+        val nom = nom_prenom.text.toString()
+        val date = date_naissance.text.toString()
+        val email = adresse_email.text.toString()
+        val classe = classe.text.toString()
+
+        val db = userDbHelper.db
+
+        val values = ContentValues()
+
+        values.put(UserDbHelper.COLUMN_EMAIL,email)
+        values.put(UserDbHelper.COLUMN_NAME,nom)
+        values.put(UserDbHelper.COLUMN_DATE,date)
+        values.put(UserDbHelper.COLUMN_CLASSE,classe)
+
+        val newRowId = db.insert(UserDbHelper.TABLE_NAME,null,values)
+        println(newRowId)
+
     }
 }
