@@ -4,118 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/counter"
-        android:layout_width="330dp"
-        android:layout_height="330dp"
-        android:layout_marginTop="32dp"
-        android:background="#E8EAF6"
-        android:gravity="center"
-        android:text="0"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/red"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#B71C1C"
-        android:text="Red"
-        app:layout_constraintEnd_toStartOf="@+id/blue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/counter" />
-
-    <Button
-        android:id="@+id/blue"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#1A237E"
-        android:text="blue"
-        app:layout_constraintEnd_toStartOf="@+id/green"
-        app:layout_constraintStart_toEndOf="@+id/red"
-        app:layout_constraintTop_toBottomOf="@+id/counter" />
-
-    <Button
-        android:id="@+id/green"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#1B5E20"
-        android:text="green"
-        app:layout_constraintEnd_toStartOf="@+id/white"
-        app:layout_constraintStart_toEndOf="@+id/blue"
-        app:layout_constraintTop_toBottomOf="@+id/counter" />
-
-    <Button
-        android:id="@+id/black"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="43dp"
-        android:backgroundTint="#000000"
-        android:text="black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/white"
-        app:layout_constraintTop_toBottomOf="@+id/counter" />
-
-    <Button
-        android:id="@+id/white"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#E8EAF6"
-        android:text="white"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toStartOf="@+id/black"
-        app:layout_constraintStart_toEndOf="@+id/green"
-        app:layout_constraintTop_toBottomOf="@+id/counter" />
-
-    <Button
-        android:id="@+id/count"
-        android:layout_width="330dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/NomPrenom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="count"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Nom et prenom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/nom_prenom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/DateNaissance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:hint="Date de naissance"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/green" />
+        app:layout_constraintTop_toBottomOf="@+id/NomPrenom">
+
+        <EditText
+            android:id="@+id/date_naissance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="16dp"
+            android:inputType="date"
+            android:hint="dd-mm-yyyy"
+            tools:layout_editor_absoluteY="171dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/AdresseEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Adresse email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DateNaissance">
+
+        <EditText
+            android:id="@+id/adresse_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="171dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Classe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Classe"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AdresseEmail">
+
+        <AutoCompleteTextView
+            android:id="@+id/classe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="171dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/AddUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#388E3C"
-        android:text="save"
-        app:layout_constraintEnd_toStartOf="@+id/load2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/load2" />
-
-    <Button
-        android:id="@+id/clear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#D32F2F"
-        android:text="clear"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:drawableEnd="@android:drawable/ic_menu_add"
+        android:text="Ajouter"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/load2"
-        app:layout_constraintTop_toTopOf="@+id/load2" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/load2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="#0288D1"
-        android:text="load"
-        app:layout_constraintEnd_toStartOf="@+id/clear"
-        app:layout_constraintStart_toEndOf="@+id/save"
-        app:layout_constraintTop_toBottomOf="@+id/count" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
