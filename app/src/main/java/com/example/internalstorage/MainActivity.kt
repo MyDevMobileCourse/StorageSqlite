@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var classe: EditText
     lateinit var AddUser: Button
     lateinit var items: Array<String>
-    val userDbHelper = UserDbHelper(this)
-
+    lateinit var userDbHelper:UserDbHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         init()
         val listOfInputs = listOf(nom_prenom, date_naissance, adresse_email, classe)
         listOfInputs.forEach { listenOnInput(it) }
+        userDbHelper = UserDbHelper(this)
+
 
 //        AddUser.setOnClickListener {
 //            if (allValid()) {
@@ -247,12 +248,12 @@ class MainActivity : AppCompatActivity() {
 
         val values = ContentValues()
 
-        values.put(UserDbHelper.COLUMN_EMAIL,email)
-        values.put(UserDbHelper.COLUMN_NAME,nom)
-        values.put(UserDbHelper.COLUMN_DATE,date)
-        values.put(UserDbHelper.COLUMN_CLASSE,classe)
+        values.put(DBContract.UserEntry.COLUMN_EMAIL,email)
+        values.put(DBContract.UserEntry.COLUMN_NAME,nom)
+        values.put(DBContract.UserEntry.COLUMN_DATE,date)
+        values.put(DBContract.UserEntry.COLUMN_CLASSE,classe)
 
-        val newRowId = db.insert(UserDbHelper.TABLE_NAME,null,values)
+        val newRowId = db.insert(DBContract.UserEntry.TABLE_NAME,null,values)
         println(newRowId)
 
     }
