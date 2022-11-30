@@ -36,6 +36,117 @@ class UserDbHelper (context:Context) : SQLiteOpenHelper(context,DATABASE_NAME, n
         onCreate(db)
     }
 
+    fun readUsers(): MutableList<UserModel> {
+        val users: MutableList<UserModel> = ArrayList<UserModel>()
+        val db = readableDatabase
+        val projection = arrayOf(
+            DBContract.UserEntry.COLUMN_USER_ID,
+            DBContract.UserEntry.COLUMN_NAME,
+            DBContract.UserEntry.COLUMN_EMAIL,
+            DBContract.UserEntry.COLUMN_CLASSE,
+            DBContract.UserEntry.COLUMN_DATE
+        )
+        val cursor = db.query(
+            DBContract.UserEntry.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        with(cursor) {
+            while (moveToNext()) {
+                val id = getInt(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_USER_ID))
+                val name = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_NAME))
+                val email = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_EMAIL))
+                val classe = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_CLASSE))
+                val date = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_DATE))
+                users.add(UserModel(id, name, email, classe, date))
+            }
+        }
+        println("users: $users")
+        println("users size: ${users.size}")
+        return users
+
+    }
+
+    fun searchUsers(search: String): MutableList<UserModel> {
+        // search by name or email
+        val users: MutableList<UserModel> = ArrayList<UserModel>()
+        val db = readableDatabase
+        val projection = arrayOf(
+            DBContract.UserEntry.COLUMN_USER_ID,
+            DBContract.UserEntry.COLUMN_NAME,
+            DBContract.UserEntry.COLUMN_EMAIL,
+            DBContract.UserEntry.COLUMN_CLASSE,
+            DBContract.UserEntry.COLUMN_DATE
+        )
+        val selection = "${DBContract.UserEntry.COLUMN_NAME} LIKE ? OR ${DBContract.UserEntry.COLUMN_EMAIL} LIKE ?"
+        val selectionArgs = arrayOf("%$search%", "%$search%")
+        val cursor = db.query(
+            DBContract.UserEntry.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        with(cursor) {
+            while (moveToNext()) {
+                val id = getInt(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_USER_ID))
+                val name = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_NAME))
+                val email = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_EMAIL))
+                val classe = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_CLASSE))
+                val date = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_DATE))
+                users.add(UserModel(id, name, email, classe, date))
+            }
+        }
+        return users
+
+    }
+
+    fun deleteUser(userId: Int) {
+        val db = writableDatabase
+        val selection = "${DBContract.UserEntry.COLUMN_USER_ID} = ?"
+        val selectionArgs = arrayOf("$userId")
+        db.delete(DBContract.UserEntry.TABLE_NAME, selection, selectionArgs)
+    }
+
+    fun getUser(userId: Int): UserModel {
+        val db = readableDatabase
+        val projection = arrayOf(
+            DBContract.UserEntry.COLUMN_USER_ID,
+            DBContract.UserEntry.COLUMN_NAME,
+            DBContract.UserEntry.COLUMN_EMAIL,
+            DBContract.UserEntry.COLUMN_CLASSE,
+            DBContract.UserEntry.COLUMN_DATE
+        )
+        val selection = "${DBContract.UserEntry.COLUMN_USER_ID} = ?"
+        val selectionArgs = arrayOf("$userId")
+        val cursor = db.query(
+            DBContract.UserEntry.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        var user : UserModel? = null
+        with(cursor) {
+            while (moveToNext()) {
+                val id = getInt(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_USER_ID))
+                val name = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_NAME))
+                val email = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_EMAIL))
+                val classe = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_CLASSE))
+                val date = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_DATE))
+                user = UserModel(id, name, email, classe, date)
+            }
+        }
+        return user!!
+    }
 
 
 }

@@ -2,12 +2,15 @@ package com.example.internalstorage
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 
 class MyAdapter (private val context: Context, private var mUsers: MutableList<UserModel>, private val mRowLayout: Int) : RecyclerView.Adapter<MyAdapter.UserViewHolder>()  {
 
@@ -22,7 +25,7 @@ class MyAdapter (private val context: Context, private var mUsers: MutableList<U
         holder.date_naissance.text = user.date_naissance
         holder.classe.text = user.classe
         holder.delete.setOnClickListener {
-            showDeleteDialog(user)
+            showDeleteDialog(user,holder.itemView)
         }
         holder.edit.setOnClickListener {
             editUser(user)
@@ -43,12 +46,12 @@ class MyAdapter (private val context: Context, private var mUsers: MutableList<U
 
     }
 
-    fun showDeleteDialog(user: UserModel) {
+    fun showDeleteDialog(user: UserModel,view:View) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Delete user")
         builder.setMessage("Are you sure you want to delete this user?")
         builder.setPositiveButton("Yes") { dialog, which ->
-            deleteUser(user)
+            deleteUser(user,view)
         }
         builder.setNegativeButton("No") { dialog, which ->
             dialog.dismiss()
@@ -57,16 +60,27 @@ class MyAdapter (private val context: Context, private var mUsers: MutableList<U
         dialog.show()
     }
 
-    fun deleteUser(user: UserModel) {
+    fun deleteUser(user: UserModel,view:View) {
         println("user id: ${user.user_id}")
+        val db = UserDbHelper(context)
+        db.deleteUser(user.user_id)
+        mUsers.remove(user)
+        notifyDataSetChanged()
+        Snackbar.make(view, "User deleted successfully", Snackbar.LENGTH_LONG).show()
     }
 
     fun refreshUsers() {
-        println("refreshing users")
+        val db = UserDbHelper(context)
+        val users = db.readUsers()
+        mUsers.clear()
+        mUsers.addAll(users)
+        notifyDataSetChanged()
     }
 
     fun editUser(user: UserModel){
-        println("edit user")
+        val intent = Intent(context, MainActivity::class.java)
+        intent.putExtra("user_id", user.user_id)
+        ContextCompat.startActivity(context,intent,null)
     }
 
 
