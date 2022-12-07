@@ -12,12 +12,13 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internalstorage.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FetchAll : AppCompatActivity() {
     lateinit var reView: RecyclerView
     lateinit var mAdapter: MyAdapter
     lateinit var empty: CardView
-    lateinit var button: Button
+    lateinit var button: FloatingActionButton
     lateinit var searchText: EditText
     lateinit var searchButton: Button
     var mUsers: MutableList<UserModel> = ArrayList<UserModel>()
