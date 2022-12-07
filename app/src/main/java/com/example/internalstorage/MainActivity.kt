@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var classe: EditText
     var user_id: Int? = null
     lateinit var AddUser: Button
+    lateinit var cancelButton: Button
     lateinit var items: Array<String>
     lateinit var userDbHelper: UserDbHelper
 
@@ -40,6 +41,33 @@ class MainActivity : AppCompatActivity() {
         val listOfInputs = listOf(nom_prenom, date_naissance, adresse_email, classe)
         listOfInputs.forEach { listenOnInput(it) }
 
+        cancelButton.setOnClickListener {
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            if (listOfInputs.any { it.text.isNotBlank() }) {
+                alertDialogBuilder.setTitle("Quit")
+                alertDialogBuilder.setMessage("Are you sure you want to clear data?")
+                alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
+                    listOfInputs.forEach { it.text.clear() }
+                    dialog.dismiss()
+                }
+                alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+                alertDialogBuilder.show()
+            } else {
+                alertDialogBuilder.setTitle("Quit")
+                alertDialogBuilder.setMessage("Are you sure you want to quit?")
+                alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
+                    super.onBackPressed()
+                    finish()
+                }
+                alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+                alertDialogBuilder.show()
+            }
+
+        }
 
         AddUser.setOnClickListener {
             if (allValid()) {
@@ -91,6 +119,7 @@ class MainActivity : AppCompatActivity() {
         Classe = findViewById(R.id.Classe)
         classe = findViewById(R.id.classe)
         AddUser = findViewById(R.id.AddUser)
+        cancelButton = findViewById(R.id.annuler)
         items = resources.getStringArray(R.array.classe)
         val adapter = ArrayAdapter(applicationContext, R.layout.class_item, items)
         (classe as? AutoCompleteTextView)?.setAdapter(adapter)
@@ -182,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
     fun validate(field: EditText) {
         val fieldLayout = field.parent.parent as TextInputLayout
-        var error = false;
+        var error = false
         if (field == date_naissance) {
             try {
 
