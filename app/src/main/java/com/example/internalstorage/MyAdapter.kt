@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 
-class MyAdapter (private val context: Context, private var mUsers: MutableList<UserModel>, private val mRowLayout: Int) : RecyclerView.Adapter<MyAdapter.UserViewHolder>()  {
+class MyAdapter (private val reqL :  ActivityResultLauncher<Intent>,private val context: Context, private var mUsers: MutableList<UserModel>, private val mRowLayout: Int) : RecyclerView.Adapter<MyAdapter.UserViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(mRowLayout, parent, false)
@@ -80,7 +81,7 @@ class MyAdapter (private val context: Context, private var mUsers: MutableList<U
     fun editUser(user: UserModel){
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra("user_id", user.user_id)
-        ContextCompat.startActivity(context,intent,null)
+        reqL.launch(intent)
     }
 
 

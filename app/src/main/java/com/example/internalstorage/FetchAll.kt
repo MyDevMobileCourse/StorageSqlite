@@ -1,11 +1,13 @@
 package com.example.internalstorage
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.internalstorage.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 class FetchAll : AppCompatActivity() {
     lateinit var reView: RecyclerView
@@ -29,7 +32,7 @@ class FetchAll : AppCompatActivity() {
         init()
         button.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            resultLauncher.launch(intent)
         }
         fetchUsers();
     }
@@ -49,7 +52,7 @@ class FetchAll : AppCompatActivity() {
     fun initRecyclerView() {
         reView = findViewById(R.id.recyclerview) as RecyclerView
         reView.layoutManager = LinearLayoutManager(this)
-        mAdapter = MyAdapter(this, mUsers, R.layout.user_item)
+        mAdapter = MyAdapter(resultLauncher,this, mUsers, R.layout.user_item)
         reView.adapter = mAdapter
         reView.visibility = View.INVISIBLE
         empty.visibility = View.INVISIBLE
@@ -95,20 +98,40 @@ class FetchAll : AppCompatActivity() {
     fun search() {
 
         val search = searchText.text.toString()
-       
-        mUsers = userDbHelper.searchUsers(search)
-        if (mUsers.size > 0) {
+        mUsers.clear()
+        val users = userDbHelper.searchUsers(search)
+        println(users.size)
+        if (users.size > 0) {
             reView.visibility = View.VISIBLE
             empty.visibility = View.INVISIBLE
+            mUsers.addAll(users)
             mAdapter.notifyDataSetChanged()
         } else {
             reView.visibility = View.INVISIBLE
             empty.visibility = View.VISIBLE
+            mUsers.clear()
             mAdapter.notifyDataSetChanged()
 
         }
 
     }
+
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    result.data?.getStringExtra("message").toString(),
+                    Snackbar.LENGTH_LONG,
+                ).setTextColor(resources.getColor(android.R.color.holo_green_dark))
+                    .setAction("OK", null).show()
+            }
+            if (searchText.text.toString().isNotEmpty()) {
+                search()
+            } else {
+                fetchUsers()
+            }
+        }
 
 
 }

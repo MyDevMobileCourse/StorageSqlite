@@ -82,8 +82,6 @@ class MainActivity : AppCompatActivity() {
                 )
                 alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
                     addUser()
-                    val intent = Intent(this, FetchAll::class.java)
-                    startActivity(intent)
                 }
                 alertDialogBuilder.setNegativeButton("No") { dialog, which ->
                     Toast.makeText(
@@ -294,13 +292,10 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).show()
             } else {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "Utilisateur ajouté avec succès",
-                    Snackbar.LENGTH_LONG
-                ).show()
+                val intent = intent
+                intent.putExtra("message", "Utilisateur ajouté avec succès")
+                setResult(RESULT_OK, intent)
                 finish()
-                startActivity(Intent(this, MainActivity::class.java))
             }
         } else {
             val nom = nom_prenom.text.toString()
@@ -333,13 +328,10 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             } else {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "Modifié avec succès",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val intent = intent
+                intent.putExtra("message", "Utilisateur modifié avec succès")
+                setResult(RESULT_OK, intent)
                 finish()
-                startActivity(Intent(this, MainActivity::class.java))
             }
         }
 

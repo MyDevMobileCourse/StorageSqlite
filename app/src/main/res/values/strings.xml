@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">internalStorage</string>
+    <string name="app_name">Users</string>
     <string-array name="classe">
         <item>DSI2</item>
         <item>DSI3</item>

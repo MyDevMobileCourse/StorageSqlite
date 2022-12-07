@@ -62,7 +62,7 @@ class UserDbHelper (context:Context) : SQLiteOpenHelper(context,DATABASE_NAME, n
                 val email = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_EMAIL))
                 val classe = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_CLASSE))
                 val date = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_DATE))
-                users.add(UserModel(id, name, email, classe, date))
+                users.add(UserModel(id, name, date,email, classe))
             }
         }
         println("users: $users")
@@ -100,7 +100,7 @@ class UserDbHelper (context:Context) : SQLiteOpenHelper(context,DATABASE_NAME, n
                 val email = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_EMAIL))
                 val classe = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_CLASSE))
                 val date = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_DATE))
-                users.add(UserModel(id, name, email, classe, date))
+                users.add(UserModel(id, name,date, email, classe))
             }
         }
         return users
@@ -142,7 +142,7 @@ class UserDbHelper (context:Context) : SQLiteOpenHelper(context,DATABASE_NAME, n
                 val email = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_EMAIL))
                 val classe = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_CLASSE))
                 val date = getString(getColumnIndexOrThrow(DBContract.UserEntry.COLUMN_DATE))
-                user = UserModel(id, name, email, classe, date)
+                user = UserModel(id, name, date,email, classe)
             }
         }
         return user!!
